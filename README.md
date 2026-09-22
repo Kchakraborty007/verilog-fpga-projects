@@ -1,23 +1,37 @@
-# Verilog & FPGA Projects
+# FSM-Based Digital Door Lock
 
-A collection of my RTL, Verilog/SystemVerilog, and FPGA design projects developed as part of my learning in digital design, embedded systems, and VLSI.
+A digital door-lock controller implemented in Verilog and deployed on an FPGA using Xilinx Vivado.
 
-## Areas
+## Overview
 
-- RTL Design
-- Verilog / SystemVerilog
-- Digital Logic Design
-- FPGA Design
-- RTL Verification
-- Computer Architecture
-- Embedded Systems
+This project implements a password-based digital door lock using a Finite State Machine (FSM).
 
-## Tools
+The design accepts button inputs corresponding to the password sequence and transitions through different states depending on the user's input. A debounce circuit is used to prevent mechanical switch bouncing from being interpreted as multiple button presses.
 
-- Xilinx Vivado
-- Verilog
-- SystemVerilog
+## Architecture
 
-## Projects
+The design consists of:
 
-Projects will be added progressively, with source code, testbenches, simulation results, and documentation where applicable.
+- **Door Lock FSM (`dlock.v`)** — Implements the password/state transition logic.
+- **Debouncer (`debouncer.v`)** — Filters mechanical button bounce.
+- **Clock Divider (`clockdivider.v`)** — Generates a slower clock suitable for button handling and control logic.
+- **Top-Level Module (`mainblock.v`)** — Integrates the individual modules.
+- **Testbench (`test_door.v`)** — Used to simulate and verify the door-lock behavior.
+- **XDC Constraints (`dlstream.xdc`)** — Defines FPGA pin and timing constraints.
+
+## Project Structure
+
+```text
+01_FSM_Doorlock/
+│
+├── constraints/
+│   └── dlstream.xdc
+│
+├── rtl/
+│   ├── clockdivider.v
+│   ├── debouncer.v
+│   ├── dlock.v
+│   └── mainblock.v
+│
+└── tb/
+    └── test_door.v
