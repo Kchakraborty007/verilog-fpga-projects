@@ -1,0 +1,19 @@
+# Vivado generated output - rebuild with each project's build.tcl instead
+*.jou
+*.log
+*.str
+*.backup.*
+*.runs/
+*.cache/
+*.sim/
+*.hw/
+*.ip_user_files/
+*.hbs/
+*.xpr
+build/
+.Xil/
+
+# Simulation output
+*.wdb
+*.vcd
+*.vvp
