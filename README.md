@@ -1,37 +1,37 @@
-# FSM-Based Digital Door Lock
+# Verilog / FPGA Projects
 
-A digital door-lock controller implemented in Verilog and deployed on an FPGA using Xilinx Vivado.
+Small digital-design projects written in Verilog and built with Vivado 2020.1 for the ZedBoard (Zynq-7020, `xc7z020clg484-1`).
 
-## Overview
+## Projects
 
-This project implements a password-based digital door lock using a Finite State Machine (FSM).
+| Project | What it is | Status |
+|---------|------------|--------|
+| [FSMdoorLock](FSMdoorLock/) | Password door lock as a finite state machine: four buttons, debouncers, clock divider. Code is PB1, PB0, PB0, PB2. | FSM verified in simulation with a self-checking testbench. Implemented for the ZedBoard (bitstream generated). See the README for a known limitation. |
+| [FSMcounter](FSMcounter/) | 4-state up/down counter driven by a 1 Hz clock divider (counts 0, 2, 4, 6). | Verified in simulation with a self-checking testbench. |
 
-The design accepts button inputs corresponding to the password sequence and transitions through different states depending on the user's input. A debounce circuit is used to prevent mechanical switch bouncing from being interpreted as multiple button presses.
-
-## Architecture
-
-The design consists of:
-
-- **Door Lock FSM (`dlock.v`)** — Implements the password/state transition logic.
-- **Debouncer (`debouncer.v`)** — Filters mechanical button bounce.
-- **Clock Divider (`clockdivider.v`)** — Generates a slower clock suitable for button handling and control logic.
-- **Top-Level Module (`mainblock.v`)** — Integrates the individual modules.
-- **Testbench (`test_door.v`)** — Used to simulate and verify the door-lock behavior.
-- **XDC Constraints (`dlstream.xdc`)** — Defines FPGA pin and timing constraints.
-
-## Project Structure
+## How each project is laid out
 
 ```text
-01_FSM_Doorlock/
-│
-├── constraints/
-│   └── dlstream.xdc
-│
-├── rtl/
-│   ├── clockdivider.v
-│   ├── debouncer.v
-│   ├── dlock.v
-│   └── mainblock.v
-│
-└── tb/
-    └── test_door.v
+<project>/
+├── rtl/            Verilog design files
+├── tb/             testbenches (the *_check.v ones print PASS / FAIL)
+├── constraints/    pin assignments (.xdc), where the project has them
+├── build.tcl       recreates the Vivado project
+└── README.md
+```
+
+Only source files are stored here. Vivado's generated output is git-ignored, and `build.tcl` rebuilds the project from the sources.
+
+## Run a project
+
+**Vivado 2020.1:** `vivado -source <project>/build.tcl` creates the project in `<project>/build/`.
+
+**Icarus Verilog** (free), from inside a project folder:
+
+```bash
+# FSMdoorLock
+iverilog -o sim rtl/dlock.v tb/tb_dlock_check.v && vvp sim
+
+# FSMcounter
+iverilog -o sim rtl/FSMcounter.v tb/tb_fsmcounter_check.v && vvp sim
+```
